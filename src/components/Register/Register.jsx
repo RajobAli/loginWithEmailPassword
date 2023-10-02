@@ -1,11 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../Firebase/Firebase.config";
 import { useState } from "react";
+import { AiFillEyeInvisible,AiFillSkin } from "react-icons/ai";
 
 
 const Register = () => {
     const [registerError,setRegisterError] = useState('');
     const [success,setSuccess] = useState('');
+    const [showPassword,setShowPassword] = useState(false)
 
 
     const handleRegister = e =>{
@@ -15,11 +17,15 @@ const Register = () => {
        
               setRegisterError('')
               setSuccess('')
-              
+
        if(password.length <6){
         setRegisterError('Password should be at least 6 character or longer');
         return;
        }
+      else if(!/[A-Z]/.test(password)){
+        setRegisterError('Your password should have at lest one Upper case Character')
+        return;
+      }
 
 
    
@@ -45,7 +51,18 @@ const Register = () => {
             <form onSubmit={handleRegister}>
                 <input  className="mb-4 w-3/4 bg-red-400"  required  type="email" name="email" id="" placeholder="Enter Email"/>
                 <br /> <br />
-                <input className="mb-4 w-3/4 bg-red-400" required type="password" name="password" id="" placeholder="Enter Password" />
+                <input className="mb-4 w-3/4 bg-red-400" 
+                required 
+                type={showPassword ? "text" : "password"}
+                 name="password"
+                  id="" 
+                 placeholder="Enter Password"  />
+                <span onClick={()=>setShowPassword(!showPassword)}> 
+                {
+                 showPassword ? <AiFillEyeInvisible></AiFillEyeInvisible> :<AiFillSkin></AiFillSkin>
+                
+                }
+                </span>
                 <br />
                 <input className="btn btn-primary" type="submit" value="Register" />
             </form>
